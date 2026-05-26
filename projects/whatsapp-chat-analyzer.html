@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WhatsApp Chat Analyzer — Interactive NLP app for analyzing WhatsApp chat exports.">
+  <title>WhatsApp Chat Analyzer — Sevket Fatih Catpinar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:           #0f172a;
+      --bg-card:      #1e293b;
+      --accent:       #38bdf8;
+      --accent-2:     #818cf8;
+      --text:         #e2e8f0;
+      --text-muted:   #94a3b8;
+      --border:       #334155;
+      --radius:       12px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      padding: 1rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .back-link:hover { color: var(--text); }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 8rem 2rem 6rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .lead {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+      margin-bottom: 2.5rem;
+      max-width: 620px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 4rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-primary { background: var(--accent); color: #0f172a; }
+    .btn-primary:hover { background: #7dd3fc; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 3rem 0;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+
+    ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-bottom: 2rem;
+    }
+
+    ul li {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      padding-left: 1.25rem;
+      position: relative;
+    }
+
+    ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.75rem;
+      top: 0.15rem;
+    }
+
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tech-tag {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem 2rem;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      main { padding: 6rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="logo">SFC</a>
+    <a href="/" class="back-link">← Back to Portfolio</a>
+  </nav>
+
+  <main>
+    <div class="section-label">NLP · Data Visualization</div>
+    <h1>💬 WhatsApp Chat Analyzer</h1>
+
+    <p class="lead">
+      An interactive web app that turns your WhatsApp chat export into a full
+      analysis report — message statistics, word trends, emoji breakdowns,
+      word clouds, and activity patterns. Supports both English and Turkish text.
+    </p>
+
+    <div class="btn-group">
+      <a href="https://sfc38-text-analysis-with-nlp-app-gim2he.streamlit.app/" target="_blank" rel="noopener" class="btn btn-primary">↗ Open Live App</a>
+      <a href="https://github.com/sfc38/Text-Analysis-with-NLP" target="_blank" rel="noopener" class="btn btn-secondary">GitHub →</a>
+    </div>
+
+    <hr>
+
+    <h2>What it does</h2>
+    <ul>
+      <li>Parses WhatsApp chat exports (.txt) and structures them into a clean dataset</li>
+      <li>Computes per-user message counts, word counts, and activity streaks</li>
+      <li>Plots message volume over time, by hour of day, and by day of week</li>
+      <li>Identifies top words per sender using NLP lemmatization and stopword removal</li>
+      <li>Generates a group word cloud from the most frequent terms</li>
+      <li>Tracks media sharing — images, videos, audio, stickers, and URLs</li>
+      <li>Extracts and counts emojis per user</li>
+      <li>Supports English (spaCy en_core_web_sm) and Turkish (tr_floret_web_lg) text</li>
+      <li>Downloadable HTML report with all charts and stats embedded</li>
+    </ul>
+
+    <hr>
+
+    <h2>Tech Stack</h2>
+    <div class="tech-tags">
+      <span class="tech-tag">Python</span>
+      <span class="tech-tag">Streamlit</span>
+      <span class="tech-tag">spaCy</span>
+      <span class="tech-tag">pandas</span>
+      <span class="tech-tag">Plotly</span>
+      <span class="tech-tag">WordCloud</span>
+      <span class="tech-tag">emoji</span>
+      <span class="tech-tag">regex</span>
+      <span class="tech-tag">NumPy</span>
+      <span class="tech-tag">Matplotlib</span>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Sevket Fatih Catpinar</p>
+  </footer>
+
+</body>
+</html>

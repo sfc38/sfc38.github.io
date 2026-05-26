@@ -219,19 +219,21 @@
       font-weight: 500;
     }
 
+    a.project-card {
+      text-decoration: none;
+      color: inherit;
+    }
+
     .project-links {
       display: flex;
       gap: 1rem;
     }
 
-    .project-links a {
-      text-decoration: none;
-      color: var(--text-muted);
+    .project-link-label {
       font-size: 0.85rem;
-      font-weight: 500;
-      transition: color 0.2s;
+      font-weight: 600;
+      color: var(--accent);
     }
-    .project-links a:hover { color: var(--accent); }
 
     /* ── Contact ──────────────────────────────────────── */
     #contact p {
@@ -307,7 +309,7 @@
     <h2>Projects</h2>
     <div class="projects-grid">
 
-      <div class="project-card">
+      <a href="/projects/whatsapp-chat-analyzer.html" class="project-card">
         <div class="project-icon">💬</div>
         <h3>WhatsApp Chat Analyzer</h3>
         <p>
@@ -324,12 +326,11 @@
           <span class="project-tag">WordCloud</span>
         </div>
         <div class="project-links">
-          <a href="https://sfc38-text-analysis-with-nlp-app-gim2he.streamlit.app/" target="_blank" rel="noopener">↗ Live App</a>
-          <a href="https://github.com/sfc38/Text-Analysis-with-NLP" target="_blank" rel="noopener">GitHub →</a>
+          <span class="project-link-label">View Project →</span>
         </div>
-      </div>
+      </a>
 
-      <div class="project-card">
+      <a href="/projects/google-maps-clustering.html" class="project-card">
         <div class="project-icon">🗺️</div>
         <h3>Google Maps Location Clustering</h3>
         <p>
@@ -346,10 +347,9 @@
           <span class="project-tag">KMeans</span>
         </div>
         <div class="project-links">
-          <a href="https://sfc38-google-maps-api-streamlit-app-google-maps-app-idiy7v.streamlit.app/" target="_blank" rel="noopener">↗ Live App</a>
-          <a href="https://github.com/sfc38/Google-Maps-API-Streamlit-App" target="_blank" rel="noopener">GitHub →</a>
+          <span class="project-link-label">View Project →</span>
         </div>
-      </div>
+      </a>
 
     </div>
   </section>
