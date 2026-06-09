@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Local OCR Lab — extract text from scanned PDFs using four open-source OCR engines, all running locally with no paid APIs.">
+  <title>Local OCR Lab — Sevket Fatih Catpinar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:           #0f172a;
+      --bg-card:      #1e293b;
+      --accent:       #38bdf8;
+      --accent-2:     #818cf8;
+      --text:         #e2e8f0;
+      --text-muted:   #94a3b8;
+      --border:       #334155;
+      --radius:       12px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      padding: 1rem 2.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    nav .logo {
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+      text-decoration: none;
+    }
+
+    .back-link {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .back-link:hover { color: var(--text); }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 8rem 2rem 6rem;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .lead {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.85;
+      margin-bottom: 2.5rem;
+      max-width: 620px;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 4rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-primary { background: var(--accent); color: #0f172a; }
+    .btn-primary:hover { background: #7dd3fc; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 3rem 0;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      color: var(--text);
+    }
+
+    ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.65rem;
+      margin-bottom: 2rem;
+    }
+
+    ul li {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      padding-left: 1.25rem;
+      position: relative;
+    }
+
+    ul li::before {
+      content: '▸';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-size: 0.75rem;
+      top: 0.15rem;
+    }
+
+    .engine-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-bottom: 2rem;
+    }
+
+    .engine-table th {
+      text-align: left;
+      padding: 0.6rem 1rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .engine-table td {
+      padding: 0.75rem 1rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+    }
+
+    .engine-table td:first-child {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .tech-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tech-tag {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+
+    footer {
+      text-align: center;
+      padding: 2.5rem 2rem;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+    }
+
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      main { padding: 6rem 1.25rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="logo">SFC</a>
+    <a href="/" class="back-link">← Back to Portfolio</a>
+  </nav>
+
+  <main>
+    <div class="section-label">Computer Vision · OCR</div>
+    <h1>🔍 Local OCR Lab</h1>
+
+    <p class="lead">
+      A web app that extracts text from scanned PDFs using four open-source OCR engines —
+      all running locally inside a Docker container with no external APIs and no paid services.
+      Built to compare engine accuracy, measure performance, and export clean text from scanned documents.
+    </p>
+
+    <div class="btn-group">
+      <a href="https://huggingface.co/spaces/sfc38/pdf-ocr-lab" target="_blank" rel="noopener" class="btn btn-primary">↗ Open Live App</a>
+      <a href="https://github.com/sfc38/pdf-ocr-lab" target="_blank" rel="noopener" class="btn btn-secondary">GitHub →</a>
+    </div>
+
+    <hr>
+
+    <h2>What it does</h2>
+    <ul>
+      <li>Upload a scanned PDF and select any page to process</li>
+      <li>Control image quality with a DPI selector (72 to 300)</li>
+      <li>Run OCR with any of four engines — or all at once for side-by-side comparison</li>
+      <li>Visualize detected words and regions with bounding box overlays</li>
+      <li>Filter low-confidence detections with a confidence threshold slider — no re-running needed</li>
+      <li>Separate timing shown for model load vs. OCR inference</li>
+      <li>Download extracted text as a <code>.txt</code> file</li>
+      <li>Jaccard word overlap matrix between engines (no reference text required)</li>
+      <li>CER and WER accuracy metrics when reference text is provided</li>
+    </ul>
+
+    <hr>
+
+    <h2>OCR Engines</h2>
+    <table class="engine-table">
+      <thead>
+        <tr>
+          <th>Engine</th>
+          <th>Type</th>
+          <th>License</th>
+          <th>Box level</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tesseract</td>
+          <td>Rule-based</td>
+          <td>Apache 2.0</td>
+          <td>Word</td>
+        </tr>
+        <tr>
+          <td>EasyOCR</td>
+          <td>Deep learning</td>
+          <td>Apache 2.0</td>
+          <td>Detection region</td>
+        </tr>
+        <tr>
+          <td>PaddleOCR</td>
+          <td>Deep learning</td>
+          <td>Apache 2.0</td>
+          <td>Detection region</td>
+        </tr>
+        <tr>
+          <td>DocTR</td>
+          <td>Deep learning</td>
+          <td>Apache 2.0</td>
+          <td>Word</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr>
+
+    <h2>Tech Stack</h2>
+    <div class="tech-tags">
+      <span class="tech-tag">Python</span>
+      <span class="tech-tag">Streamlit</span>
+      <span class="tech-tag">Tesseract</span>
+      <span class="tech-tag">EasyOCR</span>
+      <span class="tech-tag">PaddleOCR</span>
+      <span class="tech-tag">DocTR</span>
+      <span class="tech-tag">pdf2image</span>
+      <span class="tech-tag">Pillow</span>
+      <span class="tech-tag">Docker</span>
+      <span class="tech-tag">Hugging Face Spaces</span>
+    </div>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Sevket Fatih Catpinar</p>
+  </footer>
+
+</body>
+</html>
